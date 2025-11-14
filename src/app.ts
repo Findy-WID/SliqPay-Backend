@@ -11,7 +11,10 @@ import { rateLimit } from './common/middleware/rateLimit.js';
 import { PrismaClient } from '@prisma/client';
 
 export const app = express();
-app.use(helmet());
+// Helmet's type export may be treated as a namespace in some toolchains; cast to any
+// to avoid a TS2349 "not callable" error in CI/build environments. This is a
+// minimal fix — prefer updating @types/helmet or the import style if desired.
+app.use((helmet as unknown as any)());
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
